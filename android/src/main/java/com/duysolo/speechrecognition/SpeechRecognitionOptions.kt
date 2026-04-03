@@ -12,7 +12,7 @@ class SpeechRecognitionOptions(
     val contextualStrings: List<String>? = null,
     val requiresOnDeviceRecognition: Boolean = false,
     val addsPunctuation: Boolean = false,
-    val androidIntentOptions: Map<String, Any>? = null,
+    val androidIntentOptions: Map<String, Any?>? = null,
     val androidRecognitionServicePackage: String? = null,
     val audioSource: AudioSourceOptions? = null,
     val recordingOptions: RecordingOptions? = null,

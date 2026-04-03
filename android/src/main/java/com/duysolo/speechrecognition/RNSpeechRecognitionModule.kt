@@ -110,7 +110,7 @@ class RNSpeechRecognitionModule(private val reactContext: ReactApplicationContex
             promise.resolve(buildPermissionResponse(true))
             return
         }
-        val activity = currentActivity
+        val activity = reactApplicationContext.currentActivity
         if (activity == null) {
             promise.resolve(buildPermissionResponse(false))
             return
