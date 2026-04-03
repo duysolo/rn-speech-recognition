@@ -30,11 +30,13 @@
   "author": "duysolo (https://github.com/duysolo)",
   "license": "MIT",
   "homepage": "https://github.com/duysolo/rn-speech-recognition#readme",
+  "dependencies": {
+    "typescript": "~5.9.3"
+  },
   "devDependencies": {
     "@types/react": "~19.1.15",
     "react": "*",
-    "react-native": "*",
-    "typescript": "~5.9.3"
+    "react-native": "*"
   },
   "peerDependencies": {
     "react": "*",
