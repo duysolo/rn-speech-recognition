@@ -103,6 +103,8 @@ protected List<ReactPackage> getPackages() {
 
 ## Usage
 
+> **Important:** You must request and obtain permissions **before** calling `RNSpeechRecognitionModule.start()`. Calling `start()` without granted permissions will crash the app on both iOS and Android. Always call `requestPermissionsAsync()` first and check the `granted` property before proceeding. See [Permissions](#permissions) for details.
+
 ### Using Hooks
 
 The `useSpeechRecognitionEvent` hook is the easiest way to get started:
