@@ -1,6 +1,6 @@
 {
   "name": "rn-speech-recognition",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "Speech Recognition for React Native",
   "main": "build/index.js",
   "types": "build/index.d.ts",

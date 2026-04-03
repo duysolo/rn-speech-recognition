@@ -393,6 +393,7 @@ class SpeechService(
 
         // Add any additional intent extras provided by the user
         options.androidIntentOptions?.forEach { (key, value) ->
+            if (value == null) return@forEach
             // Use reflection to set the extra
             // i.e. RecognizerIntent[key
             val field = RecognizerIntent::class.java.getDeclaredField(key)
