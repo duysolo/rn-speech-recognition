@@ -1,17 +1,13 @@
-// Export the SpeechRecognition APIs
 export {
-  ExpoWebSpeechRecognition,
-  ExpoWebSpeechGrammar,
-  ExpoWebSpeechGrammarList,
-} from "./ExpoWebSpeechRecognition";
+  RNWebSpeechRecognition,
+  RNWebSpeechGrammar,
+  RNWebSpeechGrammarList,
+} from "./RNWebSpeechRecognition";
 
-// Native module
-export { ExpoSpeechRecognitionModule } from "./ExpoSpeechRecognitionModule";
+export { RNSpeechRecognitionModule } from "./RNSpeechRecognitionModule";
 
-// Hooks
 export { useSpeechRecognitionEvent } from "./useSpeechRecognitionEvent";
 
-// Constants
 export {
   AVAudioSessionCategory,
   AVAudioSessionCategoryOptions,
@@ -24,9 +20,9 @@ export {
 } from "./constants";
 
 export type {
-  ExpoSpeechRecognitionOptions,
+  RNSpeechRecognitionOptions,
   AndroidIntentOptions,
-  ExpoSpeechRecognitionNativeEventMap,
+  RNSpeechRecognitionNativeEventMap,
   AVAudioSessionCategoryOptionsValue,
   AVAudioSessionModeValue,
   AVAudioSessionCategoryValue,
@@ -35,9 +31,11 @@ export type {
   RecordingOptions,
   IOSTaskHintValue,
   SetCategoryOptions,
-  ExpoSpeechRecognitionErrorCode,
-  ExpoSpeechRecognitionErrorEvent,
-  ExpoSpeechRecognitionResultEvent,
-  ExpoSpeechRecognitionResult,
-  ExpoSpeechRecognitionResultSegment,
-} from "./ExpoSpeechRecognitionModule.types";
+  RNSpeechRecognitionErrorCode,
+  RNSpeechRecognitionErrorEvent,
+  RNSpeechRecognitionResultEvent,
+  RNSpeechRecognitionResult,
+  RNSpeechRecognitionResultSegment,
+  PermissionResponse,
+  RNSpeechRecognitionPermissionResponse,
+} from "./RNSpeechRecognitionModule.types";

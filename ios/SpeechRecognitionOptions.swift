@@ -1,56 +1,59 @@
-import ExpoModulesCore
 import Speech
 
-struct SpeechRecognitionOptions: Record {
-  @Field
+struct SpeechRecognitionOptions {
   var interimResults: Bool = false
-
-  @Field
   var lang: String = "en-US"
-
-  @Field
   var continuous: Bool = false
-
-  @Field
   var maxAlternatives: Int = 5
-
-  @Field
   var contextualStrings: [String]? = nil
-
-  @Field
   var requiresOnDeviceRecognition: Bool = false
-
-  @Field
   var addsPunctuation: Bool = false
-
-  @Field
   var recordingOptions: RecordingOptions? = nil
-
-  @Field
   var audioSource: AudioSourceOptions? = nil
-
-  @Field
   var iosTaskHint: IOSTaskHint? = nil
-
-  @Field
   var iosCategory: SetCategoryOptions? = nil
-
-  @Field
   var volumeChangeEventOptions: VolumeChangeEventOptions? = nil
-
-  @Field
   var iosVoiceProcessingEnabled: Bool? = false
+
+  init(from dict: NSDictionary) {
+    self.interimResults = dict["interimResults"] as? Bool ?? false
+    self.lang = dict["lang"] as? String ?? "en-US"
+    self.continuous = dict["continuous"] as? Bool ?? false
+    self.maxAlternatives = dict["maxAlternatives"] as? Int ?? 5
+    self.contextualStrings = dict["contextualStrings"] as? [String]
+    self.requiresOnDeviceRecognition = dict["requiresOnDeviceRecognition"] as? Bool ?? false
+    self.addsPunctuation = dict["addsPunctuation"] as? Bool ?? false
+    self.iosVoiceProcessingEnabled = dict["iosVoiceProcessingEnabled"] as? Bool ?? false
+
+    if let recordDict = dict["recordingOptions"] as? NSDictionary {
+      self.recordingOptions = RecordingOptions(from: recordDict)
+    }
+    if let audioDict = dict["audioSource"] as? NSDictionary {
+      self.audioSource = AudioSourceOptions(from: audioDict)
+    }
+    if let hint = dict["iosTaskHint"] as? String {
+      self.iosTaskHint = IOSTaskHint(rawValue: hint)
+    }
+    if let catDict = dict["iosCategory"] as? NSDictionary {
+      self.iosCategory = SetCategoryOptions(from: catDict)
+    }
+    if let volDict = dict["volumeChangeEventOptions"] as? NSDictionary {
+      self.volumeChangeEventOptions = VolumeChangeEventOptions(from: volDict)
+    }
+  }
 }
 
-struct VolumeChangeEventOptions: Record {
-  @Field
+struct VolumeChangeEventOptions {
   var enabled: Bool? = false
-
-  @Field
   var intervalMillis: Int? = nil
+
+  init(from dict: NSDictionary) {
+    self.enabled = dict["enabled"] as? Bool ?? false
+    self.intervalMillis = dict["intervalMillis"] as? Int
+  }
 }
 
-enum IOSTaskHint: String, Enumerable {
+enum IOSTaskHint: String {
   case unspecified
   case dictation
   case search
@@ -66,52 +69,40 @@ enum IOSTaskHint: String, Enumerable {
   }
 }
 
-struct RecordingOptions: Record {
-  @Field
+struct RecordingOptions {
   var persist: Bool = false
-
-  @Field
   var outputDirectory: String? = nil
-
-  @Field
   var outputFileName: String? = nil
-
-  @Field
   var outputSampleRate: Double? = nil
-
-  @Field
   var outputEncoding: String? = nil
+
+  init(from dict: NSDictionary) {
+    self.persist = dict["persist"] as? Bool ?? false
+    self.outputDirectory = dict["outputDirectory"] as? String
+    self.outputFileName = dict["outputFileName"] as? String
+    self.outputSampleRate = dict["outputSampleRate"] as? Double
+    self.outputEncoding = dict["outputEncoding"] as? String
+  }
 }
 
-struct AudioSourceOptions: Record {
-  @Field
+struct AudioSourceOptions {
   var uri: String = ""
-
-  @Field
   var audioEncoding: Int? = nil
-
-  @Field
   var sampleRate: Int? = 16000
-
-  @Field
   var audioChannels: Int? = 1
-
-  @Field
   var chunkDelayMillis: Int? = nil
+
+  init(from dict: NSDictionary) {
+    self.uri = dict["uri"] as? String ?? ""
+    self.audioEncoding = dict["audioEncoding"] as? Int
+    self.sampleRate = dict["sampleRate"] as? Int ?? 16000
+    self.audioChannels = dict["audioChannels"] as? Int ?? 1
+    self.chunkDelayMillis = dict["chunkDelayMillis"] as? Int
+  }
 }
 
-struct GetSupportedLocaleOptions: Record {
-  @Field
-  var androidRecognitionServicePackage: String? = nil
-}
-
-enum CategoryParam: String, Enumerable {
-  case ambient
-  case soloAmbient
-  case playback
-  case record
-  case playAndRecord
-  case multiRoute
+enum CategoryParam: String {
+  case ambient, soloAmbient, playback, record, playAndRecord, multiRoute
 
   var avCategory: AVAudioSession.Category {
     switch self {
@@ -125,15 +116,10 @@ enum CategoryParam: String, Enumerable {
   }
 }
 
-enum CategoryOptionsParam: String, Enumerable {
-  case mixWithOthers
-  case duckOthers
-  case interruptSpokenAudioAndMixWithOthers
-  case allowBluetooth
-  case allowBluetoothA2DP
-  case allowAirPlay
-  case defaultToSpeaker
-  case overrideMutedMicrophoneInterruption
+enum CategoryOptionsParam: String {
+  case mixWithOthers, duckOthers, interruptSpokenAudioAndMixWithOthers
+  case allowBluetooth, allowBluetoothA2DP, allowAirPlay
+  case defaultToSpeaker, overrideMutedMicrophoneInterruption
 
   var avCategoryOption: AVAudioSession.CategoryOptions {
     switch self {
@@ -154,16 +140,9 @@ enum CategoryOptionsParam: String, Enumerable {
   }
 }
 
-enum ModeParam: String, Enumerable {
-  case `default`
-  case gameChat
-  case measurement
-  case moviePlayback
-  case spokenAudio
-  case videoChat
-  case videoRecording
-  case voiceChat
-  case voicePrompt
+enum ModeParam: String {
+  case `default`, gameChat, measurement, moviePlayback, spokenAudio
+  case videoChat, videoRecording, voiceChat, voicePrompt
 
   var avMode: AVAudioSession.Mode {
     switch self {
@@ -180,18 +159,27 @@ enum ModeParam: String, Enumerable {
   }
 }
 
-struct SetCategoryOptions: Record {
-  @Field
+struct SetCategoryOptions {
   var category: CategoryParam = .playAndRecord
-
-  @Field
   var categoryOptions: [CategoryOptionsParam] = [.duckOthers]
-
-  @Field
   var mode: ModeParam = .measurement
+
+  init(from dict: NSDictionary) {
+    if let cat = dict["category"] as? String, let c = CategoryParam(rawValue: cat) {
+      self.category = c
+    }
+    if let opts = dict["categoryOptions"] as? [String] {
+      self.categoryOptions = opts.compactMap { CategoryOptionsParam(rawValue: $0) }
+    }
+    if let m = dict["mode"] as? String, let mode = ModeParam(rawValue: m) {
+      self.mode = mode
+    }
+  }
+
+  // Default init
+  init() {}
 }
 
-struct SetAudioSessionActiveOptions: Record {
-  @Field
+struct SetAudioSessionActiveOptions {
   var notifyOthersOnDeactivation: Bool? = true
 }

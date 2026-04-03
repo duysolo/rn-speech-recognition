@@ -7,7 +7,7 @@ export default tseslint.config([
   tseslint.configs.recommended,
   js.configs.recommended,
   {
-    ignores: ["build/**", "app.plugin.js", "example/**"],
+    ignores: ["build/**", "example/**"],
   },
   {
     files: ["src/**/*.{js,jsx,ts,tsx}"],

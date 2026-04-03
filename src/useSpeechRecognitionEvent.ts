@@ -1,22 +1,20 @@
-import { ExpoSpeechRecognitionModule } from "./ExpoSpeechRecognitionModule";
-import type { ExpoSpeechRecognitionNativeEvents } from "./ExpoSpeechRecognitionModule.types";
-import { useEventListener } from "expo";
+import { useEffect } from "react";
+import { RNSpeechRecognitionModule } from "./RNSpeechRecognitionModule";
+import type { RNSpeechRecognitionNativeEventMap } from "./RNSpeechRecognitionModule.types";
 
-/**
- * This hook allows you to listen to native events emitted by the `ExpoSpeechRecognitionModule`.
- *
- * Note: this is not the same as the `SpeechRecognition` event listener on the web speech API.
- *
- * @param eventName The name of the event to listen to
- * @param listener The listener function to call when the event is emitted
- */
 export function useSpeechRecognitionEvent<
-  K extends keyof ExpoSpeechRecognitionNativeEvents,
->(eventName: K, listener: ExpoSpeechRecognitionNativeEvents[K]) {
-  return useEventListener(
-    ExpoSpeechRecognitionModule,
-    eventName,
-    // @ts-expect-error
-    listener,
-  );
+  K extends keyof RNSpeechRecognitionNativeEventMap,
+>(
+  eventName: K,
+  listener: (event: RNSpeechRecognitionNativeEventMap[K]) => void,
+) {
+  useEffect(() => {
+    const subscription = RNSpeechRecognitionModule.addListener(
+      eventName,
+      listener,
+    );
+    return () => {
+      subscription.remove();
+    };
+  }, [eventName, listener]);
 }
