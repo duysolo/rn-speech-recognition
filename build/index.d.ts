@@ -1,0 +1,6 @@
+export { RNWebSpeechRecognition, RNWebSpeechGrammar, RNWebSpeechGrammarList, } from "./RNWebSpeechRecognition";
+export { RNSpeechRecognitionModule } from "./RNSpeechRecognitionModule";
+export { useSpeechRecognitionEvent } from "./useSpeechRecognitionEvent";
+export { AVAudioSessionCategory, AVAudioSessionCategoryOptions, AVAudioSessionMode, RecognizerIntentExtraLanguageModel, RecognizerIntentEnableLanguageSwitch, AudioEncodingAndroid, TaskHintIOS, SpeechRecognizerErrorAndroid, } from "./constants";
+export type { RNSpeechRecognitionOptions, AndroidIntentOptions, RNSpeechRecognitionNativeEventMap, AVAudioSessionCategoryOptionsValue, AVAudioSessionModeValue, AVAudioSessionCategoryValue, AudioEncodingAndroidValue, AudioSourceOptions, RecordingOptions, IOSTaskHintValue, SetCategoryOptions, RNSpeechRecognitionErrorCode, RNSpeechRecognitionErrorEvent, RNSpeechRecognitionResultEvent, RNSpeechRecognitionResult, RNSpeechRecognitionResultSegment, PermissionResponse, RNSpeechRecognitionPermissionResponse, } from "./RNSpeechRecognitionModule.types";
+//# sourceMappingURL=index.d.ts.map
