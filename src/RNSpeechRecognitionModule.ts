@@ -6,15 +6,19 @@ import type {
 
 const NativeModule = NativeModules.RNSpeechRecognition;
 
+const emitter = NativeModule
+  ? new NativeEventEmitter(NativeModule)
+  : null;
+
 if (!NativeModule) {
-  throw new Error(
-    "rn-speech-recognition: NativeModule is null. Make sure the native module is properly linked.",
+  console.warn(
+    "rn-speech-recognition: NativeModule is null. Make sure the native module is properly linked and you have rebuilt the app.",
   );
 }
 
-const emitter = new NativeEventEmitter(NativeModule);
+type EventSubscription = { remove: () => void };
 
-type EventSubscription = ReturnType<NativeEventEmitter["addListener"]>;
+const noopSubscription: EventSubscription = { remove: () => {} };
 
 export const RNSpeechRecognitionModule: RNSpeechRecognitionModuleType & {
   addListener<K extends keyof RNSpeechRecognitionNativeEventMap>(
@@ -22,17 +26,20 @@ export const RNSpeechRecognitionModule: RNSpeechRecognitionModuleType & {
     listener: (event: RNSpeechRecognitionNativeEventMap[K]) => void,
   ): EventSubscription;
   removeAllListeners(eventName: keyof RNSpeechRecognitionNativeEventMap): void;
+  isAvailable: boolean;
 } = {
   ...NativeModule,
+  isAvailable: !!NativeModule,
   addListener<K extends keyof RNSpeechRecognitionNativeEventMap>(
     eventName: K,
     listener: (event: RNSpeechRecognitionNativeEventMap[K]) => void,
   ): EventSubscription {
+    if (!emitter) return noopSubscription;
     return emitter.addListener(eventName as string, listener);
   },
   removeAllListeners(eventName: keyof RNSpeechRecognitionNativeEventMap) {
-    emitter.removeAllListeners(eventName as string);
+    emitter?.removeAllListeners(eventName as string);
   },
-  abort: () => NativeModule.abort(),
-  stop: () => NativeModule.stop(),
+  abort: () => NativeModule?.abort(),
+  stop: () => NativeModule?.stop(),
 };
