@@ -19,6 +19,8 @@ if (!NativeModule) {
 type EventSubscription = { remove: () => void };
 
 const noopSubscription: EventSubscription = { remove: () => {} };
+const noopAsync = () => Promise.resolve({} as any);
+const noop = () => {};
 
 export const RNSpeechRecognitionModule: RNSpeechRecognitionModuleType & {
   addListener<K extends keyof RNSpeechRecognitionNativeEventMap>(
@@ -28,8 +30,63 @@ export const RNSpeechRecognitionModule: RNSpeechRecognitionModuleType & {
   removeAllListeners(eventName: keyof RNSpeechRecognitionNativeEventMap): void;
   isAvailable: boolean;
 } = {
-  ...NativeModule,
   isAvailable: !!NativeModule,
+
+  // Core methods
+  start: (options) => NativeModule?.start(options),
+  stop: () => NativeModule?.stop(),
+  abort: () => NativeModule?.abort(),
+
+  // Permission methods
+  requestPermissionsAsync: () =>
+    NativeModule?.requestPermissionsAsync() ?? noopAsync(),
+  getPermissionsAsync: () =>
+    NativeModule?.getPermissionsAsync() ?? noopAsync(),
+  getMicrophonePermissionsAsync: () =>
+    NativeModule?.getMicrophonePermissionsAsync() ?? noopAsync(),
+  requestMicrophonePermissionsAsync: () =>
+    NativeModule?.requestMicrophonePermissionsAsync() ?? noopAsync(),
+  getSpeechRecognizerPermissionsAsync: () =>
+    NativeModule?.getSpeechRecognizerPermissionsAsync() ?? noopAsync(),
+  requestSpeechRecognizerPermissionsAsync: () =>
+    NativeModule?.requestSpeechRecognizerPermissionsAsync() ?? noopAsync(),
+
+  // Query methods
+  getStateAsync: () =>
+    NativeModule?.getStateAsync() ?? Promise.resolve("inactive"),
+  getSupportedLocales: (options) =>
+    NativeModule?.getSupportedLocales(options) ??
+    Promise.resolve({ locales: [], installedLocales: [] }),
+  getSpeechRecognitionServices: () =>
+    NativeModule?.getSpeechRecognitionServices() ?? [],
+  getDefaultRecognitionService: () =>
+    NativeModule?.getDefaultRecognitionService() ?? { packageName: "" },
+  getAssistantService: () =>
+    NativeModule?.getAssistantService() ?? { packageName: "" },
+
+  // Capability methods
+  supportsOnDeviceRecognition: () =>
+    NativeModule?.supportsOnDeviceRecognition() ?? false,
+  supportsRecording: () =>
+    NativeModule?.supportsRecording() ?? false,
+  isRecognitionAvailable: () =>
+    NativeModule?.isRecognitionAvailable() ?? false,
+
+  // Platform-specific
+  androidTriggerOfflineModelDownload: (options) =>
+    NativeModule?.androidTriggerOfflineModelDownload(options) ?? noopAsync(),
+  setCategoryIOS: (options) =>
+    NativeModule?.setCategoryIOS(options),
+  getAudioSessionCategoryAndOptionsIOS: () =>
+    NativeModule?.getAudioSessionCategoryAndOptionsIOS() ?? {
+      category: "playAndRecord",
+      categoryOptions: ["defaultToSpeaker", "allowBluetooth"],
+      mode: "measurement",
+    },
+  setAudioSessionActiveIOS: (value, options) =>
+    NativeModule?.setAudioSessionActiveIOS(value, options),
+
+  // Event methods
   addListener<K extends keyof RNSpeechRecognitionNativeEventMap>(
     eventName: K,
     listener: (event: RNSpeechRecognitionNativeEventMap[K]) => void,
@@ -40,6 +97,4 @@ export const RNSpeechRecognitionModule: RNSpeechRecognitionModuleType & {
   removeAllListeners(eventName: keyof RNSpeechRecognitionNativeEventMap) {
     emitter?.removeAllListeners(eventName as string);
   },
-  abort: () => NativeModule?.abort(),
-  stop: () => NativeModule?.stop(),
 };
