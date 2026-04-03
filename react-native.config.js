@@ -1,13 +1,12 @@
 module.exports = {
   dependency: {
     platforms: {
-      ios: {
-        podspecPath: 'ios/RNSpeechRecognition.podspec',
-      },
+      ios: {},
       android: {
         sourceDir: 'android/',
-        packageImportPath: 'import com.duysolo.speechrecognition.RNSpeechRecognitionPackage;',
+        packageImportPath:
+          'import com.duysolo.speechrecognition.RNSpeechRecognitionPackage;',
       },
     },
   },
-};
+}
